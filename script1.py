@@ -8,12 +8,57 @@ def search_command():
     list1.delete(0,END)
     for row in backend.search(title_text.get(),author_text.get(),year_text.get(),isbn_text.get()):
         list1.insert(END, row)
+def valid_isbn(isbn_var):
+        isbn_var = str(isbn_var)
+        print(isbn_var)
+        if len(isbn_var)!= 10 and len(isbn_var)!= 13:
+            return False
+        if len(isbn_var) == 10:
+            sum1 =0
+            count = 1
+            idx= len(isbn_var)-1
+            while idx>=0:
+                sum1+= int(isbn_var[idx])*count
+                count+=1
+                idx-=1
+            if sum1%11 == 0:
+                return True
+            else:
+                print("hey")
+                return False
+        else:
+            sum1 =0
+            count = 1
+            idx= len(isbn_var)-1
+            while idx>=0:
+                if count%2==0:
+                    sum1+= int(isbn_var[idx])*3
+                else:
+                    sum1+= int(isbn_var[idx])
+                count+=1
+                idx-=1
+
+            if sum1%10 == 0:
+                return True
+            else:
+                print(sum1)
+                return False
+
+
+
+
+
+
+
 def insert_command():
-    print("hello world")
-    backend.insert(title_text.get(),author_text.get(),year_text.get(),isbn_text.get())
-    list1.delete(0,END)
-    for row in backend.view():
-        list1.insert(END, row)
+    if valid_isbn(isbn_text.get()) == True:
+        backend.insert(title_text.get(),author_text.get(),year_text.get(),isbn_text.get())
+        list1.delete(0,END)
+        for row in backend.view():
+            list1.insert(END, row)
+    else:
+        list1.delete(0,END)
+        list1.insert(END, "Not a valid isbn!!!")
 def get_selected_row(event):
     global selected_tuple
     if len(list1.curselection())<1:
